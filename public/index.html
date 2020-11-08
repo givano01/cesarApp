@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesar Message app. Only for tyrants</title>
+</head>
+
+<body>
+
+    <section>
+        <header>  
+            Give us all your secrets ;)
+        </header>
+        <input type="text" id="message" /><br>
+        <input type="number" id="secretKey" /><br>
+        <button id="crypterBT">Crypter</button>
+        <label id="secretId"></label>
+    </section>
+
+    <section>
+        <header>
+            What do you want to know
+        </header>
+        <input type="number" id="id" /><br>
+        <input type="number" id="key" /><br>
+        <button id="decrypterBT">Crypter</button>
+        <label id="decryptedMessage"></label>
+    </section>
+
+    
+
+
+
+    <script>
+
+        document.getElementById("crypterBT").onclick = function () {
+
+            const tekst = document.getElementById("message").value;
+            const key = document.getElementById("secretKey").value;
+
+            const config = {
+                method: "POST",
+                body: JSON.stringify({ message: tekst, secretKey: key }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            fetch("/secret", config).then(data => {
+                return data.json()
+            })
+            .then(info => {
+                document.getElementById("secretId").innerHTML = info.secretId;
+        })
+        }
+
+        document.getElementById("decrypterBT").onclick = function () {
+
+            const secretId = document.getElementById("id").value;
+            const key = document.getElementById("key").value;
+
+            fetch(`/secret/${secretId}/${key}`).then(data => {
+                return data.json()
+            })
+            .then(info => {
+                document.getElementById("decryptedMessage").innerHTML = info.message;
+            })
+        }
+
+        
+
+    </script>
+
+</body>
+
+</html>
